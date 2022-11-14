@@ -1,6 +1,0 @@
-# dune init project frontend
-# OCAMLPARAM: unset
-# Shared cache: disabled
-# Workspace root: "/Users/justinzhao/Desktop/Senior Year/Functional
-# Programming/OCAML-Gomoku"
-# Auto-detected concurrency: 10
