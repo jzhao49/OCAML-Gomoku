@@ -47,9 +47,9 @@ AI played stone at 7,7! #AI moves after player
 - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - 
 
-./play put 3,5
+./play put 4,4
 
-AI played stone at 7,8! #AI moves after player
+AI played stone at 8,7! #AI moves after player
 
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
@@ -67,9 +67,9 @@ AI played stone at 7,8! #AI moves after player
 - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - 
 
-./play put 3,6
+./play put 5,4
 
-AI played stone at 7,9! #AI moves after player
+AI played stone at 9,7! #AI moves after player
 
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
@@ -87,9 +87,9 @@ AI played stone at 7,9! #AI moves after player
 - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - 
 
-./play put 3,7
+./play put 6,4
 
-AI played stone at 7,10! #AI moves after player
+AI played stone at 7,4! #AI moves after player
 
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
@@ -98,16 +98,16 @@ AI played stone at 7,10! #AI moves after player
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - 
-- - - - - - - O O O O - - - -
+- - - - - - - O O O - - - - -
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
-- - - X X X X - - - - - - - - 
+- - - X X X X 0 - - - - - - - 
 - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - 
 
-./play put 3,8
+./play put 2,4
 
 You Win!!! Congratulations!
 
@@ -118,7 +118,7 @@ You Win!!! Congratulations!
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - 
-- - - - - - - O O O O - - - -
+- - - - - - - O O O - - - - -
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - -
 - - - X X X X X - - - - - - - 
