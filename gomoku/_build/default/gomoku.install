@@ -1,8 +1,0 @@
-lib: [
-  "_build/install/default/lib/gomoku/META"
-  "_build/install/default/lib/gomoku/dune-package"
-  "_build/install/default/lib/gomoku/opam"
-]
-bin: [
-  "_build/install/default/bin/gomoku"
-]
