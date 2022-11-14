@@ -5,7 +5,7 @@
 (generate_opam_files true)
 
 (source
- (github jzhao49/OCAML-Gomoku/))
+ (github jzhao49/OCAML-Gomoku))
 
 (authors "Justin Zhao" "Mihir Chakravarthi")
 
