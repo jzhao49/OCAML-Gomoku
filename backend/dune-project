@@ -1,0 +1,22 @@
+(lang dune 3.4)
+
+(name backend)
+
+(generate_opam_files true)
+
+(source
+ (github jzhao49/OCAML-Gomoku/))
+
+(authors "Justin Zhao" "Mihir Chakravarthi")
+
+(maintainers "jzhao49@jhu.edu" "mchakra9@jhu.edu")
+
+(package
+ (name backend)
+ (synopsis "A short synopsis")
+ (description "A longer description")
+ (depends ocaml dune)
+ (tags
+  (topics "to describe" your project)))
+
+; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
