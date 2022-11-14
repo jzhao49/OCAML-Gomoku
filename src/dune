@@ -1,0 +1,7 @@
+(executable
+  (name server)
+  (modules server)
+  (libraries dream)
+  (preprocess
+    (pss lwt_ppx))
+)
