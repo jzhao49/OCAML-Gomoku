@@ -1,4 +1,4 @@
-open Core;;
+open Core
 
 module Vec: sig
   type t = (int * int) [@@deriving compare, sexp]

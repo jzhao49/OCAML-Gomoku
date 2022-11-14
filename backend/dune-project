@@ -5,11 +5,15 @@
 (generate_opam_files true)
 
 (source
+<<<<<<< Updated upstream
  (github jzhao49/OCAML-Gomoku))
+=======
+ (github mchakra9/OCAML-Gomoku))
+>>>>>>> Stashed changes
 
 (authors "Justin Zhao" "Mihir Chakravarthi")
 
-(maintainers "jzhao49@jhu.edu" "mchakra9@jhu.edu")
+(maintainers "jzhao49@jhu.edu" "mihir.chakravarthi@gmail.com")
 
 (package
  (name backend)

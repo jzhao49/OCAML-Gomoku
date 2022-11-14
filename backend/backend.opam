@@ -2,11 +2,19 @@
 opam-version: "2.0"
 synopsis: "A short synopsis"
 description: "A longer description"
+<<<<<<< Updated upstream
 maintainer: ["jzhao49@jhu.edu" "mchakra9@jhu.edu"]
 authors: ["Justin Zhao" "Mihir Chakravarthi"]
 tags: ["topics" "to describe" "your" "project"]
 homepage: "https://github.com/jzhao49/OCAML-Gomoku"
 bug-reports: "https://github.com/jzhao49/OCAML-Gomoku/issues"
+=======
+maintainer: ["jzhao49@jhu.edu" "mihir.chakravarthi@gmail.com"]
+authors: ["Justin Zhao" "Mihir Chakravarthi"]
+tags: ["topics" "to describe" "your" "project"]
+homepage: "https://github.com/mchakra9/OCAML-Gomoku"
+bug-reports: "https://github.com/mchakra9/OCAML-Gomoku/issues"
+>>>>>>> Stashed changes
 depends: [
   "ocaml"
   "dune" {>= "3.4"}
@@ -26,4 +34,8 @@ build: [
     "@doc" {with-doc}
   ]
 ]
+<<<<<<< Updated upstream
 dev-repo: "git+https://github.com/jzhao49/OCAML-Gomoku.git"
+=======
+dev-repo: "git+https://github.com/mchakra9/OCAML-Gomoku.git"
+>>>>>>> Stashed changes
