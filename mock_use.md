@@ -1,6 +1,6 @@
 # Mock Use of OCAML-Gomoku
 
-Note that all interactions with this application will be done on the front-end, but for purposes of demonstrating a mock-use we will display a command-line version below. 
+Note that all interactions with this application will be done on the front-end, but for purposes of demonstrating a mock-use we will display a command-line version below. We will be implementing a CLI version before proceeding forward with the front-end version.
 
 ***Note that the below example is a very basic game and our evaluation function of our AI at release will not be as rudimentary as this**.
 
