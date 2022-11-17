@@ -4,7 +4,7 @@ module Coordinates: sig
   type t = (int * int) [@@deriving compare, sexp]
 end 
 
-module Board: sig
+module Game: sig
   (* 
      Map where the keys are Coordinates of 2 elements 
   *)
