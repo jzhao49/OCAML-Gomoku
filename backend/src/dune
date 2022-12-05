@@ -8,13 +8,13 @@
 (library
  (name minimax)
  (modules minimax)
- (libraries core board game)
+ (libraries core board)
  (preprocess
   (pps bisect_ppx ppx_jane)))
 
 (executable
  (name play)
  (modules play)
- (libraries minimax board game core dream yojson ppx_deriving_yojson.runtime)
+ (libraries minimax board core dream yojson ppx_deriving_yojson.runtime)
  (preprocess
   (pps ppx_deriving_yojson ppx_jane lwt_ppx)))
