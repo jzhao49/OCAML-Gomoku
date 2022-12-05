@@ -1,8 +1,6 @@
 open Core
 
-module Coordinates: sig
-  type t = (int * int) [@@deriving compare, sexp]
-end
+xd
 
 (* Add a player module, encapsulate more logic, player has their own pieces *)
 
