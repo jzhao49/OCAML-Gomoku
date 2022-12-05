@@ -6,13 +6,6 @@
   (pps bisect_ppx ppx_jane ppx_deriving_yojson)))
 
 (library
- (name game)
- (modules game)
- (libraries core board)
- (preprocess
-  (pps bisect_ppx ppx_jane)))
-
-(library
  (name minimax)
  (modules minimax)
  (libraries core board game)
