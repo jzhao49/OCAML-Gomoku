@@ -1,4 +1,3 @@
-open Core
 open Board
 
 (* 
@@ -6,6 +5,6 @@ open Board
    has, and current player's turn in order to calculate the best move
    for the AI to make 
 *)
-val eval: Game.pieces -> 
+val eval: Game.pieces_map -> 
     Coordinates.t list list -> 
         Coordinates.t list list -> Game.player_number -> Coordinates.t
