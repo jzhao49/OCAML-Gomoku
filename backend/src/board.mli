@@ -32,7 +32,7 @@ module Game: sig
   (* 
      Conducts a player insertion move. Returns error if not possible or invalid.
   *)
-  val insert_piece: pieces_map -> Coordinates.t -> player_number -> (pieces_map, pieces_map) result
+  val insert_piece: pieces_map -> Coordinates.t -> player_number -> (pieces_map, string) result
 
   (* 
      takes in list of all the lines players have and outputs their longest line 
@@ -56,6 +56,6 @@ module Game: sig
      Inserts a piece and conducts all checks for status of game
   *)
 
-  val game_over: Coordinates.t -> player_number -> pieces_map -> (bool, player_number) result
+  val game_over: Coordinates.t -> player_number -> pieces_map -> bool * player_number
 
 end 

@@ -32,10 +32,16 @@ module Game = struct
     |> Yojson.Safe.to_string
 
 
-  let insert_piece (pieces: pieces_map) ((to_insert_x, to_insert_y): Coordinates.t) (player: player_number): (pieces_map, pieces_map) result =
+  let valid_insert (pieces: pieces_map) ((to_insert_x, to_insert_y): Coordinates.t) =
     match CoordMap.find pieces (to_insert_x, to_insert_y) with
-    | Some _ -> Error pieces (* If there is already a piece at the location, return an error *)
-    | None -> Ok (CoordMap.add_exn pieces ~key:(to_insert_x, to_insert_y) ~data:player) (* If there is no piece, add it *)
+    | Some _ -> false (* If there is already a piece at the location, return an error *)
+    | None -> true (* If there is no piece there yet return true *)
+
+
+  let insert_piece (pieces: pieces_map) ((to_insert_x, to_insert_y): Coordinates.t) (player: player_number): (pieces_map, string) result =
+    if valid_insert pieces (to_insert_x, to_insert_y) 
+      then Ok (CoordMap.add_exn pieces ~key:(to_insert_x, to_insert_y) ~data:player)
+    else Error "invalid insert"
 
   let rec longest_player_line_helper ((x, y): Coordinates.t) ((dx, dy): Coordinates.t) (pieces: pieces_map) (player: player_number) =
     match CoordMap.find pieces (x, y) with
@@ -75,11 +81,6 @@ module Game = struct
     let line_lengths = check_all_directions_helper (x, y) pieces directions [] in
       max line_lengths (-1) 
 
-  let game_over ((to_insert_x, to_insert_y): Coordinates.t) (player: player_number) (pieces: pieces_map): (bool, player_number) result =
-    match insert_piece pieces ((to_insert_x, to_insert_y)) player with
-    | Ok new_pieces -> 
-      let has_winner = (check_all_directions (to_insert_x, to_insert_y) new_pieces) = 5 in 
-        Ok has_winner
-    | Error _ -> Error player
-
+  let game_over ((inserted_x, inserted_y): Coordinates.t) (player: player_number) (pieces: pieces_map): bool * player_number =
+    (check_all_directions (inserted_x, inserted_y) pieces = 5, player)
 end
