@@ -122,7 +122,27 @@ let test_game_over _ =
   init_board := (match Game.insert_piece !init_board (7,9) 0 with
     | Ok(board) -> board
     | Error(_) -> !init_board);
-    assert_equal (false, 0)
+  assert_equal (false, 0)
+    @@ Game.game_over (7,9) 0 (!init_board);
+  init_board := (match Game.insert_piece !init_board (1,1) 1 with
+    | Ok(board) -> board
+    | Error(_) -> !init_board);
+  init_board := (match Game.insert_piece !init_board (7,10) 0 with
+    | Ok(board) -> board
+    | Error(_) -> !init_board);
+  init_board := (match Game.insert_piece !init_board (1,2) 1 with
+    | Ok(board) -> board
+    | Error(_) -> !init_board);
+  init_board := (match Game.insert_piece !init_board (7,7) 0 with
+    | Ok(board) -> board
+    | Error(_) -> !init_board);
+  init_board := (match Game.insert_piece !init_board (1,3) 1 with
+    | Ok(board) -> board
+    | Error(_) -> !init_board);
+  init_board := (match Game.insert_piece !init_board (7,6) 0 with
+    | Ok(board) -> board
+    | Error(_) -> !init_board);
+  assert_equal (true, 0)
     @@ Game.game_over (7,9) 0 (!init_board)
 
 
