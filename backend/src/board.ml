@@ -45,8 +45,8 @@ module Game = struct
 
   let rec longest_player_line_helper ((x, y): Coordinates.t) ((dx, dy): Coordinates.t) (pieces: pieces_map) (player: player_number) =
     match CoordMap.find pieces (x, y) with
-    | Some player_number -> (
-      if player_number = player then
+    | Some p2 -> (
+      if p2 = player then
         match longest_player_line_helper (x + dx, y + dy) (dx, dy) pieces player with
         | cur_length -> cur_length + 1
       else 0
@@ -60,7 +60,7 @@ module Game = struct
       let pos_count = longest_player_line_helper (x, y) (dx, dy) pieces player in
         (* Find the length in the negative direction starting from position (x, y) *)
         let neg_count = longest_player_line_helper (x, y) (-dx, -dy) pieces player in
-          pos_count + neg_count
+          pos_count + neg_count - 1
     )
     | _ -> 0
 
