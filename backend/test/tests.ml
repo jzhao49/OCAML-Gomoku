@@ -46,12 +46,12 @@ let test_check_all_directions _ =
     | Error(_) -> !init_board);
     assert_equal 1
     @@ Game.check_all_directions (7,8) (!init_board);
-  init_board := (match Game.insert_piece !init_board (8,8) 1 with
+    init_board := (match Game.insert_piece !init_board (8,8) 1 with
     | Ok(board) -> board
     | Error(_) -> !init_board);
-    (* assert_equal 1
-    @@ Game.check_all_directions (8,8) (!init_board); *)
-  init_board := (match Game.insert_piece !init_board (7,9) 0 with
+    assert_equal 1
+    @@ Game.check_all_directions (8,8) (!init_board);
+    init_board := (match Game.insert_piece !init_board (7,9) 0 with
     | Ok(board) -> board
     | Error(_) -> !init_board);
     assert_equal 2
@@ -106,7 +106,7 @@ let test_game_over _ =
   |> insert_test (2,2) 1 |> insert_test (1,1) 0
   |> insert_test (2,3) 1 |> list_of_player_lines 0 |> longest 0); *)
 
-let test_game_over _ = 
+(* let test_game_over _ = 
   (* start with a fresh map for tests *)
   init_board := Game.CoordMap.empty;
   assert_equal 0
@@ -144,6 +144,8 @@ let test_game_over _ =
     | Error(_) -> !init_board);
   assert_equal (true, 0)
     @@ Game.game_over (7,9) 0 (!init_board)
+    assert_equal (false, 0)
+    @@ Game.game_over (7,9) 0 (!init_board) *)
 
 
 let tests = "Initial tests" >: test_list [
