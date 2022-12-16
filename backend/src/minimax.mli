@@ -6,5 +6,8 @@ open Board
    for the AI to make 
 *)
 val eval: Game.pieces_map -> 
-    Coordinates.t list list -> 
-        Coordinates.t list list -> Game.player_number -> Coordinates.t
+int -> int
+
+val minimax: Game.pieces_map -> int -> int -> Coordinates.t * int
+
+val ai_move: Game.pieces_map -> int -> Game.pieces_map
