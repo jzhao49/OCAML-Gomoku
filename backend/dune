@@ -1,10 +1,15 @@
 (rule
-  (target ocaml_gomoku.zip)
+  (target ocaml-gomoku.zip)
   (deps
-    src/minimax.ml
-    src/board.ml
+   src/board.ml
+   src/minimax.ml
+   src/play.ml
+   src/play.ml
+   src/dune
+   test/dune
+   test/tests.ml
   )
   (action
-    (run zip -R ocaml_gomoku.zip %{deps})
+   (run zip -R ocaml-gomoku.zip %{deps})
   )
-)
+ )

@@ -18,3 +18,12 @@
  (libraries minimax board core dream yojson ppx_deriving_yojson.runtime)
  (preprocess
   (pps ppx_deriving_yojson ppx_jane lwt_ppx)))
+
+(executable
+  (name server)
+  (modules server)
+  (libraries minimax board core ppx_deriving_yojson.runtime dream yojson)
+  (preprocess
+    (pps ppx_deriving_yojson ppx_jane lwt_ppx)
+  )
+)

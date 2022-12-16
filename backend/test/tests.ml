@@ -152,7 +152,6 @@ let tests = "Initial tests" >: test_list [
     "Test Insert" >:: test_insert;
     "Test Check All Directions" >:: test_check_all_directions;
     "Test Max" >:: test_max;
-    "Test Game Over" >:: test_game_over
   ]
   
 let series = "Assignment3 Tests" >::: [

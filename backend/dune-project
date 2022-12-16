@@ -10,9 +10,8 @@
 
 (package
  (name backend)
- (synopsis "A short synopsis")
- (description "A longer description")
+ (synopsis "The backend game logic for Gomoku in OCAML")
+ (description "The backend game logic for Gomoku in OCAML")
  (depends ocaml dune)
  (allow_empty))
-
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
