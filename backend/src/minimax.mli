@@ -10,4 +10,4 @@ int -> int
 
 val minimax: Game.pieces_map -> int -> int -> Coordinates.t * int
 
-val ai_move: Game.pieces_map -> int -> Game.pieces_map
+val ai_move: Game.pieces_map -> int -> Coordinates.t
