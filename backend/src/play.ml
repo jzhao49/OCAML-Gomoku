@@ -3,19 +3,12 @@ open Board
 
 module CoordMap = Game.CoordMap
 
-let user_move : Coordinates.t =
-    let move_str = In_channel.input_line In_channel.stdin in
-    let move_list = String.split (Option.value_exn move_str) ~on:' ' in
-    let x = Int.of_string (List.nth_exn move_list 0) in
-    let y = Int.of_string (List.nth_exn move_list 1) in
-    (x, y)
-
 let make_move (pieces : Game.pieces_map) (move: Coordinates.t) (ai: bool) (current_player : int) : (int * Game.pieces_map) =
     match Game.insert_piece pieces move current_player with
     | Ok new_pieces -> (
         match Game.game_over move current_player new_pieces with
         | true, current_player -> ((
-            if ai then print_endline (sprintf "AI wins")
+            if ai && current_player = 2 then print_endline (sprintf "AI wins")
             else print_endline (sprintf "Player %d wins!" current_player)); (1, new_pieces))
         | _ -> (2, new_pieces)
     )
@@ -39,13 +32,26 @@ let rec play_gomoku (pieces : int CoordMap.t) (ai : bool) (current_player : int)
             | _ -> print_endline (sprintf "Won't reach this");)
         else (
             (* User enters a move *)
-            print_string "Enter move (x y): ";
+            print_string "Player 2 Enter move: ";
+            let user_move : Coordinates.t =
+                let move_str = In_channel.input_line In_channel.stdin in
+                let move_list = String.split (Option.value_exn move_str) ~on:' ' in
+                let x = Int.of_string (List.nth_exn move_list 0) in
+                let y = Int.of_string (List.nth_exn move_list 1) in
+                (x, y) in
             match make_move pieces user_move ai current_player with
             | (1, _) -> print_endline (sprintf "Game over")
             | (2, new_pieces) -> play_gomoku new_pieces ai (if current_player = 1 then 2 else 1)
             | (3, pieces) -> play_gomoku pieces ai current_player
             | _ -> print_endline (sprintf "Won't reach this");))
         | 1 -> (
+            print_string "Player 1 Enter move: ";
+            let user_move : Coordinates.t =
+                let move_str = In_channel.input_line In_channel.stdin in
+                let move_list = String.split (Option.value_exn move_str) ~on:' ' in
+                let x = Int.of_string (List.nth_exn move_list 0) in
+                let y = Int.of_string (List.nth_exn move_list 1) in
+                (x, y) in
             match make_move pieces user_move ai current_player with
             | (1, _) -> print_endline (sprintf "Game over")
             | (2, new_pieces) -> play_gomoku new_pieces ai (if current_player = 1 then 2 else 1)
