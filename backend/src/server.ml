@@ -6,7 +6,7 @@
 
 open Core
 
-type payload_obj = {payload: string} [@@deriving yojson]
+type response_object = {body: string} [@@deriving yojson]
 
 type coordinate = {x: int; y: int} [@@deriving yojson]
 
@@ -16,17 +16,17 @@ type game = {
   winner: int option;
 }
 
-let serialize_payload (payload: string) = 
-  {payload = payload} 
-  |> payload_obj_to_yojson 
+let serialize_response (body: string): Dream.response Lwt.t = 
+  {body = body} 
+  |> response_object_to_yojson 
   |> Yojson.Safe.to_string
   |> Dream.json
 
-let deserialize_payload_field (json_body: string) = 
+let deserialize_payload_field (json_body: string): string = 
   let open Yojson.Safe in
-  match from_string json_body |> payload_obj_of_yojson with
-  | Ok p -> 
-    let payload = p.payload in
+  match from_string json_body |> response_object_of_yojson with
+  | Ok r -> 
+    let payload = r.body in
     let payload_str = to_string(`String payload) in
     String.drop_prefix payload_str 1 |> fun dropped -> String.drop_suffix dropped 1
   | Error _ -> 
@@ -39,5 +39,46 @@ let deserialize_coordinate_field (json_body: string) =
   | Error _ -> 
     failwith "Deserialization of JSON object failed. Check to make sure there is an \"x\" and \"y\" field in the body."
 
-let () = 
-  failwith "unimplemented"
+let () =
+
+  let open Yojson.Safe in
+
+  let game_states_map = Hashtbl.create (module String) 
+  in
+
+  (* Client sends the game_id (generated on the frontend) *)
+  let handle_game_creation request =
+    let%lwt body = Dream.body request in
+    let game_id = deserialize_payload_field body in
+    Hashtbl.add_exn game_states_map ~key:game_id ~data:{
+      pieces = Board.Game.CoordMap.empty;
+      white = false; 
+      winner = None
+    };
+    serialize_response "OK"
+  in
+
+  let handle_ai_game_creation request =
+    let%lwt body = Dream.body request in
+    let game_id = deserialize_payload_field body in
+    Hashtbl.add_exn game_states_map ~key:game_id ~data:{
+      pieces = Board.Game.CoordMap.empty;
+      white = false;
+      winner = None
+    };
+    serialize_response "OK"
+  in
+
+  Dream.run ~port:8080
+  @@ Dream.logger
+  @@ Dream.router [
+    Dream.scope "/game" [] [ 
+      Dream.post "/create" handle_game_creation;
+      Dream.post "/create-ai" handle_ai_game_creation;
+      Dream.post "/move_player" handle_new_player_move;
+      Dream.post "/move_ai" handle_new_ai_move;
+      Dream.get "/game_over" handle_game_over;
+      Dream.get "/board" handle_get_board;
+      Dream.get "/turn" handle_get_turn;
+    ];
+  ]
