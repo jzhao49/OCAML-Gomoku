@@ -136,7 +136,7 @@ let is_game_over (board: Game.pieces_map): bool =
     let player_has_won (player: int) = 
       let rec check_win_row (x: int) (y: int): bool = 
         (* base case: if we have reached the end of the row, return false *)
-          if x > 15 then
+          if x > 14 then
             false
           else
             (* recursive case: if the current piece is the same color as the player, 
@@ -149,7 +149,7 @@ let is_game_over (board: Game.pieces_map): bool =
         (* check for five consecutive pieces in a column *)
         let rec check_win_col (x: int) (y: int) : bool =
           (* base case: if we have reached the end of the column, return false *)
-          if y > 15 then
+          if y > 14 then
             false
           else
             (* recursive case: if the current piece is the same color as the player, check the next piece in the column; otherwise, check the next column from the same starting row *)
@@ -160,7 +160,7 @@ let is_game_over (board: Game.pieces_map): bool =
         in
         let rec check_diag (x: int) (y: int) (dx: int) (dy: int) : bool =
           (* base case: if we have reached the end of the diagonal, return false *)
-          if x > 15 || y > 15 then
+          if x > 14 || y > 14 then
             false
           else
             (* recursive case: if the current piece is the same color as the player, check the next piece in the diagonal; otherwise, check the next diagonal from the same starting point *)
@@ -173,33 +173,36 @@ let is_game_over (board: Game.pieces_map): bool =
         check_win_row 0 0 || check_win_col 0 0 || check_diag 0 0 1 1 || check_diag 4 0 1 1
       in
       (* return true if either player has won the game, false otherwise *)
-      player_has_won 0 || player_has_won 1
+      player_has_won 1 || player_has_won 2
 
 let undo_insert (state: board_state) ((x, y): Coordinates.t): Game.pieces_map =
   CoordMap.remove state.board (x, y)
 
 (* Define weights for different patterns *)
-let two_in_a_row_weight = 10
-let three_in_a_row_weight = 100
-let four_in_a_row_weight = 1000
-let five_in_a_row_weight = 10000
+let two_row_weight = 10
+let three_row_weight = 100
+let four_row_weight = 1000
+let five_row_weight = 10000
 
 (* Define a function to count the number of pieces in a row in a given direction *)
 let rec count_in_a_row (board : Game.pieces_map) (x : int) (y : int) (dx : int) (dy : int) (player : int) : int =
   (* If the current cell is out of bounds or does not contain the player's piece, return 0 *)
-  if x < 0 || x >= 15 || y < 0 || y >= 15 || CoordMap.find_exn board (x, y) <> player then 0
+  if x < 0 || x > 14|| y < 0 || y > 14 || CoordMap.find_exn board (x, y) <> player then 0
   (* Otherwise, add 1 to the count and continue in the given direction *)
   else 1 + count_in_a_row board (x + dx) (y + dy) dx dy player
 
-(* Define the heuristic function *)
-let heuristic (board : Game.pieces_map) (player : int) : int =
+(* Heuristic function that evaluates the state of the board given the heuristics 
+  2 in a row (weight: 10)
+  3 in a row (weight: 100)
+  4 in a row (weight: 1000)
+  5 in a row (weight: 10000)   
+*)
+let heuristic_func (board : Game.pieces_map) : int =
   let value = ref 0 in
-  (* Iterate over all cells on the board *)
+  
   for x = 0 to 15 - 1 do
     for y = 0 to 15 - 1 do
-      (* If the current cell is empty, skip it *)
       if CoordMap.find_exn board (x, y) = 0 then ()
-      (* Otherwise, check for different patterns in all directions *)
       else
         let current_player = CoordMap.find_exn board (x, y) in
         let count_horizontal = count_in_a_row board x y 1 0 current_player in
@@ -208,10 +211,10 @@ let heuristic (board : Game.pieces_map) (player : int) : int =
         let count_diag_right = count_in_a_row board x y 1 (-1) current_player in
         (* Add the appropriate weight for each pattern found *)
         let add_weight n =
-          if n = 2 then value := !value + two_in_a_row_weight
-          else if n = 3 then value := !value + three_in_a_row_weight
-          else if n = 4 then value := !value + four_in_a_row_weight
-          else if n = 5 then value := !value + five_in_a_row_weight
+          if n = 2 then value := !value + two_row_weight
+          else if n = 3 then value := !value + three_row_weight
+          else if n = 4 then value := !value + four_row_weight
+          else if n = 5 then value := !value + five_row_weight
         in
         add_weight count_horizontal;
         add_weight count_vertical;
@@ -219,13 +222,12 @@ let heuristic (board : Game.pieces_map) (player : int) : int =
         add_weight count_diag_right
     done
   done;
-  (* Return the value, scaled by the player's score *)
-  !value * player
+  !value
 
 (* Define the minimax function *)
 let rec minimax_ab (state : board_state) (depth : int) (is_max_branch : bool) (alpha : int ref) (beta : int ref) : int =
   (* Base case: return the utility of the current state if we have reached the maximum depth or if the game is over *)
-  if depth = 0 || is_game_over state.board then heuristic state.board state.player
+  if depth = 0 || is_game_over state.board then heuristic_func state.board
   (* Recursive case: continue searching for the best move *)
   else if is_max_branch then
     (* Max player: find the maximum value among all possible moves *)
@@ -259,5 +261,23 @@ let rec minimax_ab (state : board_state) (depth : int) (is_max_branch : bool) (a
       (* if !beta <= alpha then CoordMap.stop (); *)
       (* Undo the move *)
       let _ = undo_insert new_state coord in
-      ()) (available_positions state.board);
+      ()
+    ) (available_positions state.board);
     !best_value
+
+let find_best_move (state: board_state) (depth: int) (player: int): Coordinates.t =
+  let best_move = ref (List.hd_exn (available_positions state.board)) in
+  let best_value = ref Int.min_value in
+  
+  List.iter ~f:(fun avail_pos ->
+    let new_state = {board = insert_piece_no_error state.board avail_pos player; player = player} in
+    let value = minimax_ab new_state (-depth) true (ref 0) (ref 0) in  
+    if value > !best_value then 
+      begin
+        best_value := value;
+        best_move := avail_pos;
+      end;
+    let _ = undo_insert state avail_pos in ();
+  ) (available_positions state.board);
+  
+  !best_move
