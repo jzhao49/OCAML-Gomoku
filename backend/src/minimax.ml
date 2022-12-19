@@ -121,3 +121,143 @@ let rec minimax (p : Game.pieces_map) (cur_player : int) (depth : int) :
 let ai_move (p : Game.pieces_map) (cur_player : int) : Coordinates.t =
   let best_move, _ = minimax p cur_player 3 in
   best_move
+
+
+(* Used for alpha beta pruning for Minimax *)
+type board_state = {
+  board: (Int.t) CoordMap.t;
+  player: int;
+}
+
+let is_game_over (board: Game.pieces_map): bool = 
+  (* If the board is completely filled but there was no winner then return true *)
+  if CoordMap.length board = 15 * 15 then true
+  else 
+    let player_has_won (player: int) = 
+      let rec check_win_row (x: int) (y: int): bool = 
+        (* base case: if we have reached the end of the row, return false *)
+          if x > 15 then
+            false
+          else
+            (* recursive case: if the current piece is the same color as the player, 
+               check the next piece in the row; otherwise, check the next row from the same starting column *)
+            if CoordMap.find_exn board (x, y) = player then
+              check_win_row (x + 1) y
+            else
+              check_win_row x (y + 1)
+        in
+        (* check for five consecutive pieces in a column *)
+        let rec check_win_col (x: int) (y: int) : bool =
+          (* base case: if we have reached the end of the column, return false *)
+          if y > 15 then
+            false
+          else
+            (* recursive case: if the current piece is the same color as the player, check the next piece in the column; otherwise, check the next column from the same starting row *)
+            if CoordMap.find_exn board (x, y) = player then
+              check_win_col x (y + 1)
+            else
+              check_win_col (x + 1) y
+        in
+        let rec check_diag (x: int) (y: int) (dx: int) (dy: int) : bool =
+          (* base case: if we have reached the end of the diagonal, return false *)
+          if x > 15 || y > 15 then
+            false
+          else
+            (* recursive case: if the current piece is the same color as the player, check the next piece in the diagonal; otherwise, check the next diagonal from the same starting point *)
+            if CoordMap.find_exn board (x, y) = player then
+              check_diag (x + dx) (y + dy) dx dy
+            else
+              check_diag x y dx dy
+        in
+        (* check for five consecutive pieces in all directions *)
+        check_win_row 0 0 || check_win_col 0 0 || check_diag 0 0 1 1 || check_diag 4 0 1 1
+      in
+      (* return true if either player has won the game, false otherwise *)
+      player_has_won 0 || player_has_won 1
+
+let undo_insert (state: board_state) ((x, y): Coordinates.t): Game.pieces_map =
+  CoordMap.remove state.board (x, y)
+
+(* Define weights for different patterns *)
+let two_in_a_row_weight = 10
+let three_in_a_row_weight = 100
+let four_in_a_row_weight = 1000
+let five_in_a_row_weight = 10000
+
+(* Define a function to count the number of pieces in a row in a given direction *)
+let rec count_in_a_row (board : Game.pieces_map) (x : int) (y : int) (dx : int) (dy : int) (player : int) : int =
+  (* If the current cell is out of bounds or does not contain the player's piece, return 0 *)
+  if x < 0 || x >= 15 || y < 0 || y >= 15 || CoordMap.find_exn board (x, y) <> player then 0
+  (* Otherwise, add 1 to the count and continue in the given direction *)
+  else 1 + count_in_a_row board (x + dx) (y + dy) dx dy player
+
+(* Define the heuristic function *)
+let heuristic (board : Game.pieces_map) (player : int) : int =
+  let value = ref 0 in
+  (* Iterate over all cells on the board *)
+  for x = 0 to 15 - 1 do
+    for y = 0 to 15 - 1 do
+      (* If the current cell is empty, skip it *)
+      if CoordMap.find_exn board (x, y) = 0 then ()
+      (* Otherwise, check for different patterns in all directions *)
+      else
+        let current_player = CoordMap.find_exn board (x, y) in
+        let count_horizontal = count_in_a_row board x y 1 0 current_player in
+        let count_vertical = count_in_a_row board x y 0 1 current_player in
+        let count_diag_left = count_in_a_row board x y 1 1 current_player in
+        let count_diag_right = count_in_a_row board x y 1 (-1) current_player in
+        (* Add the appropriate weight for each pattern found *)
+        let add_weight n =
+          if n = 2 then value := !value + two_in_a_row_weight
+          else if n = 3 then value := !value + three_in_a_row_weight
+          else if n = 4 then value := !value + four_in_a_row_weight
+          else if n = 5 then value := !value + five_in_a_row_weight
+        in
+        add_weight count_horizontal;
+        add_weight count_vertical;
+        add_weight count_diag_left;
+        add_weight count_diag_right
+    done
+  done;
+  (* Return the value, scaled by the player's score *)
+  !value * player
+
+(* Define the minimax function *)
+let rec minimax_ab (state : board_state) (depth : int) (is_max_branch : bool) (alpha : int ref) (beta : int ref) : int =
+  (* Base case: return the utility of the current state if we have reached the maximum depth or if the game is over *)
+  if depth = 0 || is_game_over state.board then heuristic state.board state.player
+  (* Recursive case: continue searching for the best move *)
+  else if is_max_branch then
+    (* Max player: find the maximum value among all possible moves *)
+    let best_value = ref Int.min_value in
+    List.iter ~f:(fun coord ->
+      (* Apply the move and update the alpha value *)
+      let new_board = insert_piece_no_error state.board coord 1 in
+      let new_state = {board = new_board; player = 2} in
+      let value = minimax_ab new_state (depth - 1) (not is_max_branch) alpha beta in
+      best_value := max !best_value value;
+      alpha := max !alpha value;
+      (* Prune the search if alpha is greater than or equal to beta *)
+      (* There's no good way to break out of an iterator in OCAML so idk what to do here *)
+      (* if !alpha >= !beta then List.stop (); *)
+      (* Undo the move *)
+      let _ = undo_insert new_state coord in ()
+    ) (available_positions state.board);
+    !best_value
+  else
+    (* Min player: find the minimum value among all possible moves *)
+    let best_value = ref Int.max_value in
+    List.iter ~f:(fun coord ->
+      (* Apply the move and update the beta value *)
+      let new_board = insert_piece_no_error state.board coord 2 in
+      let new_state = {board = new_board; player = 1} in
+      let value = minimax_ab new_state (depth - 1) (not is_max_branch) alpha beta in
+      best_value := min !best_value value;
+      beta := min !beta value;
+      (* Prune the search if beta is less than or equal to alpha *)
+      (* There's no good way to break out of an iterator in OCAML so idk what to do here *)
+      (* if !beta <= alpha then CoordMap.stop (); *)
+      (* Undo the move *)
+      let _ = undo_insert new_state coord in
+      ()) (available_positions state.board);
+    !best_value
