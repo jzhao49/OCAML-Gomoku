@@ -9,8 +9,8 @@ module CoordMap = Game.CoordMap
 (* let difficulty = 3 *)
 
 let rec create_coordinates_ls x y acc =
-  if x > 15 then acc
-  else if y > 15 then create_coordinates_ls (x + 1) 0 acc
+  if x > 14 then acc
+  else if y > 14 then create_coordinates_ls (x + 1) 0 acc
   else create_coordinates_ls x (y + 1) ((x, y) :: acc)
 
 let coordinates_ls = create_coordinates_ls 0 0 []
@@ -41,7 +41,7 @@ let update_map (init : Game.pieces_map) (cur_board : Game.pieces_map) :
    score * 10 *)
 
 
-let open_three_in_a_row (pieces_map : Game.pieces_map) (player : int) : int =
+(* let open_three_in_a_row (pieces_map : Game.pieces_map) (player : int) : int =
   let directions = [ (0, 1); (1, 0); (1, 1); (-1, 1) ] in
   (* Iterate over each position on the board and count the number of open three-in-a-row sequences for the given player *)
   CoordMap.fold pieces_map ~init:0
@@ -58,9 +58,9 @@ let open_three_in_a_row (pieces_map : Game.pieces_map) (player : int) : int =
               && CoordMap.find_exn pieces_map right_pos = 0
             then acc + 1
             else acc)
-      else acc)
+      else acc) *)
 
-
+(* 
 (* Eval returns -10000000 if opponent has 3 in a rows, and a positive number otherwise *)
 let eval (pieces_map : Game.pieces_map) (cur_player : int) : int =
   let player_2 = if cur_player = 1 then 2 else 1 in
@@ -71,7 +71,7 @@ let eval (pieces_map : Game.pieces_map) (cur_player : int) : int =
   else
     (* Calculate the number of open three-in-a-row sequences for the current player and the opponent, and subtract the opponent's count from the current player's count *)
     open_three_in_a_row pieces_map cur_player
-    - open_three_in_a_row pieces_map player_2
+    - open_three_in_a_row pieces_map player_2 *)
 
 (* Minimax uses a minimax algorithm to return the best move and
    score for the AI *)
@@ -87,7 +87,7 @@ let available_positions (p : Game.pieces_map) :
   let cur_board = update_map init_map p in
   CoordMap.fold cur_board ~init:[] ~f:(fun ~key:pos ~data:player acc ->
       if player = 0 then pos :: acc else acc)
-
+(* 
 let rec minimax (p : Game.pieces_map) (cur_player : int) (depth : int) :
     Coordinates.t * int =
   let available_positions_ls = available_positions p in
@@ -112,15 +112,15 @@ let rec minimax (p : Game.pieces_map) (cur_player : int) (depth : int) :
           else if score < high_score then (pos, score)
           else (best_move, high_score))
     in
-    (best_move, high_score)
+    (best_move, high_score) *)
 
 (* let ai_move (p : Game.pieces_map) (cur_player : int) : Game.pieces_map =
    let best_move, _ = minimax p cur_player difficulty in
    insert_piece_no_error p best_move cur_player *)
 
-let ai_move (p : Game.pieces_map) (cur_player : int) : Coordinates.t =
+(* let ai_move (p : Game.pieces_map) (cur_player : int) : Coordinates.t =
   let best_move, _ = minimax p cur_player 3 in
-  best_move
+  best_move *)
 
 
 (* Used for alpha beta pruning for Minimax *)
@@ -281,3 +281,8 @@ let find_best_move (state: board_state) (depth: int) (player: int): Coordinates.
   ) (available_positions state.board);
   
   !best_move
+
+let ai_move (p : Game.pieces_map) (cur_player : int) : Coordinates.t =
+  let new_board = update_map init_map p in
+  let best_move = find_best_move ({board = new_board; player = cur_player}) 3 cur_player in
+  best_move
