@@ -13,7 +13,7 @@ type board_state = {
 (* val eval: Game.pieces_map -> 
 int -> int *)
 
-val minimax_ab: board_state -> int -> bool -> int ref -> int ref -> int
+val minimax_ab: board_state -> int -> bool -> int ref -> int ref -> int -> int
 
 val find_best_move: board_state -> int -> int -> Coordinates.t
 
