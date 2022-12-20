@@ -141,7 +141,8 @@ let rec minimax_ab (state : board_state) (depth : int) (is_max_branch : bool)
     let best_value = ref Int.min_value in
       List.iter
         ~f:(fun coord ->
-          printf "coord: %d, %d\n" (fst coord) (snd coord);
+          match coord with | (x,y) ->
+          printf "coord: %d, %d\n" x y; 
           (* Apply the move and update the alpha value *)
           let new_board = insert_piece_no_error state.board coord other_player in
           printf "inserted value: %d\n" (Map.find_exn state.board coord);
@@ -218,3 +219,4 @@ let ai_move (p : Game.pieces_map) (cur_player : int) : Coordinates.t =
       find_best_move { board = new_board; player = cur_player } 3 cur_player
     in
     best_move
+
