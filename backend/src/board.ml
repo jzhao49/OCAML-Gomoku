@@ -25,11 +25,22 @@ module Game = struct
     Using yojson to output list of pieces 
   *)
   let print_board (pieces : pieces_map) =
-    CoordMap.to_alist pieces
+    let board = ref "" in
+    for i = 0 to 14 do
+      for j = 0 to 14 do
+        if CoordMap.mem pieces (i, j) then
+          board := !board ^ string_of_int (CoordMap.find_exn pieces (i, j)) ^ " "
+        else 
+          board := !board ^ "- "
+      done;
+      board := !board ^ "\n\n "
+    done;
+    !board
+    (* CoordMap.to_alist pieces
     |> List.map ~f:(fun (position, player) -> match position with x, y -> 
       { x = x; y = y; player = player })
     |> positions_ls_to_yojson 
-    |> Yojson.Safe.to_string
+    |> Yojson.Safe.to_string *)
 
   let valid_insert (pieces: pieces_map) ((to_insert_x, to_insert_y): Coordinates.t) =
     match CoordMap.find pieces (to_insert_x, to_insert_y) with

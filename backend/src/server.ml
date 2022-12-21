@@ -282,10 +282,10 @@ let () =
       | Error _ -> failwith "Invalid Move"
     in
   let check_for_winner (pos: coordinate) (player: int) (pieces: Board.Game.pieces_map) =
-      match Board.Game.game_over (pos.x, pos.y) player pieces with
-      | (true, 2) -> Some(2)
-      | (true, 1) -> Some(1)
-      | (_, _) -> None
+    match Board.Game.game_over (pos.x, pos.y) player pieces with
+    | (true, 2) -> Some(2)
+    | (true, 1) -> Some(1)
+    | (_, _) -> None
     in
     let%lwt body = Dream.body request in
     let pos = deserialize_coordinate_field body in
@@ -299,17 +299,18 @@ let () =
       pieces = inserted_map;
       player = other_player;
       winner = None;
-    }; Printf.ksprintf Dream.html "Turn: Player %d!" other_player in
-    let handle_new_ai_move request =
-      let%lwt body = Dream.body request in
-      let pos = deserialize_coordinate_field body in
-      let player = !game_state.player in
-      let other_player = if player = 2 then 1 else 2 in
-      let inserted_map = 
-        match Board.Game.insert_piece !game_state.pieces (pos.x, pos.y) player with
-        | Ok board_inserted -> board_inserted
-        | Error _ -> failwith "Invalid Move"
-      in
+    }; Printf.ksprintf Dream.html "Turn: Player %d!" other_player 
+  in
+  let handle_new_ai_move request =
+    let%lwt body = Dream.body request in
+    let pos = deserialize_coordinate_field body in
+    let player = !game_state.player in
+    let other_player = if player = 2 then 1 else 2 in
+    let inserted_map = 
+      match Board.Game.insert_piece !game_state.pieces (pos.x, pos.y) player with
+      | Ok board_inserted -> board_inserted
+      | Error _ -> failwith "Invalid Move"
+    in
       let winner =       
         match Board.Game.game_over (pos.x, pos.y) player inserted_map with
           | (true, 2) -> Some(2)
@@ -347,8 +348,6 @@ let () =
           | None -> "No Winner"
       in serialize_response end_of_turn
     in
-
-
   Dream.run ~port:8080
   @@ Dream.logger
   @@ Dream.router [
@@ -359,6 +358,6 @@ let () =
       Dream.post "/move_player" handle_new_player_move;
       Dream.post "/move_ai" handle_new_ai_move;
       Dream.get "/board" (fun _ ->
-        Dream.json (Game.print_board !game_state.pieces));
+        Dream.html (Game.print_board !game_state.pieces));
     ];
   ]
