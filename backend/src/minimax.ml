@@ -34,48 +34,59 @@ let available_positions (p : Game.pieces_map) : Coordinates.t list =
 type board_state = { board : Int.t CoordMap.t; player : int }
 
 let is_game_over (board : Game.pieces_map) : bool =
-  (* If the board is completely filled but there was no winner then return true *)
-  if CoordMap.length board = 15 * 15 then true
+  if CoordMap.length board = 15 * 15 then true (* If the board is full *)
   else
-    let player_has_won (player : int) =
-      let rec check_win_row (x : int) (y : int) : bool =
-        (* base case: if we have reached the end of the row, return false *)
-        if x > 14 then false
-        else if
-          (* recursive case: if the current piece is the same color as the player,
-             check the next piece in the row; otherwise, check the next row from the same starting column *)
-          CoordMap.find_exn board (x, y) = player
-        then check_win_row (x + 1) y
-        else check_win_row x (y + 1)
+    let player_has_won (player: int) =
+      let is_valid_coordinate (x, y) =
+        x >= 0 && x < 15 && y >= 0 && y < 15
       in
-      (* check for five consecutive pieces in a column *)
-      let rec check_win_col (x : int) (y : int) : bool =
-        (* base case: if we have reached the end of the column, return false *)
-        if y > 14 then false
-        else if
-          (* recursive case: if the current piece is the same color as the player, check the next piece in the column; otherwise, check the next column from the same starting row *)
-          CoordMap.find_exn board (x, y) = player
-        then check_win_col x (y + 1)
-        else check_win_col (x + 1) y
+      let has_piece pieces_map (x, y) =
+        CoordMap.mem pieces_map (x, y) 
       in
-      let rec check_diag (x : int) (y : int) (dx : int) (dy : int) : bool =
-        (* base case: if we have reached the end of the diagonal, return false *)
-        if x > 14 || y > 14 then false
-        else if
-          (* recursive case: if the current piece is the same color as the player, check the next piece in the diagonal; otherwise, check the next diagonal from the same starting point *)
-          CoordMap.find_exn board (x, y) = player
-        then check_diag (x + dx) (y + dy) dx dy
-        else check_diag x y dx dy
+      let rec check_win_row (x: int) (y: int) (in_a_row: int): bool =
+        if in_a_row = 5 then true
+        else if x > 14 then false
+        else if is_valid_coordinate (x, y) && has_piece board (x, y) && CoordMap.find_exn board (x, y) = player
+          then 
+            check_win_row x (y + 1) (in_a_row + 1 )
+        else check_win_row (x + 1) (y) 0
+      in
+      let rec check_win_col (x : int) (y : int) (in_a_row: int): bool =
+        if in_a_row = 5 then true
+        else if y > 14 then false
+        else if is_valid_coordinate (x, y) && has_piece board (x, y) && CoordMap.find_exn board (x, y) = player
+          then check_win_col (x + 1) y (in_a_row + 1)
+        else check_win_col x (y + 1) 0
+      in
+      let has_five_in_a_row (pieces_map: Game.pieces_map) (coord_seq: Coordinates.t list) =
+        let first_color = CoordMap.find_exn pieces_map (List.hd_exn coord_seq) in
+        List.for_all ~f:(fun coord -> CoordMap.find_exn pieces_map coord = first_color) coord_seq
+      in
+      let check_diagonal_win (pieces_map: Game.pieces_map) =
+        let check_diagonal (x: int) (y: int) =
+          let rec check_diagonal_seq acc x y =
+            if is_valid_coordinate (x, y) && has_piece pieces_map (x, y)
+            then check_diagonal_seq ((x, y) :: acc) (x + 1) (y + 1)
+            else acc
+          in
+          check_diagonal_seq [] x y
+        in
+        let diagonals =
+          let top_row_diagonals = List.map ~f:(fun x -> check_diagonal x 0) (List.range 0 14) in
+          let bottom_row_diagonals = List.map ~f:(fun x -> check_diagonal x 14) (List.range 0 14) in
+          let left_column_diagonals = List.map ~f:(fun y -> check_diagonal 0 y) (List.range 1 13) in
+          let right_column_diagonals = List.map ~f:(fun y -> check_diagonal 14 y) (List.range 1 13) in
+          top_row_diagonals @ bottom_row_diagonals @ left_column_diagonals @ right_column_diagonals
+        in
+        List.exists ~f:(fun seq -> List.length seq >= 5 && has_five_in_a_row pieces_map seq) diagonals
       in
       (* check for five consecutive pieces in all directions *)
-      check_win_row 0 0 || check_win_col 0 0 || check_diag 0 0 1 1
-      || check_diag 4 0 1 1
+      check_win_row 0 0 0 || check_win_col 0 0 0 || check_diagonal_win board
     in
     (* return true if either player has won the game, false otherwise *)
     player_has_won 1 || player_has_won 2
 
-let undo_insert (state : board_state) ((x, y) : Coordinates.t) : Game.pieces_map
-    =
+let undo_insert (state : board_state) ((x, y) : Coordinates.t) : Game.pieces_map =
   CoordMap.remove state.board (x, y)
 
 (* Define weights for different patterns *)
