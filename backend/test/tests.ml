@@ -172,7 +172,7 @@ let test_available_positions _ =
   assert_equal 225 (List.length (available_positions (init_map)));
   assert_equal true (List.is_empty (available_positions full_map))
 
-let test_find_best_move _ =
+let test_find_best_move_depth_1 _ =
   let board_state =
     {
       player = 1;
@@ -187,6 +187,21 @@ let test_find_best_move _ =
       } in
     assert_equal (14,14) (find_best_move board_state 1 2)
 
+let test_find_best_move_depth_2 _ =
+  let board_state =
+    {
+      player = 1;
+      board =
+        CoordMap.of_alist_exn
+          [ ((0, 0), 1); ((1, 1), 2); ((2, 2), 1); ((3, 3), 2); ((4, 4), 1) ];
+    } in assert_equal (4, 3) (find_best_move board_state 2 2);
+    let board_state =
+      {
+        player = 1;
+        board = CoordMap.remove full_map (14,14)
+      } in
+    assert_equal (14,14) (find_best_move board_state 2 2)
+  
 let tests =
   "Board tests"
   >: test_list
@@ -204,7 +219,8 @@ let minimax_tests =
          "Test Game Over" >:: test_is_game_over;
          "Test Heuristic" >:: test_heuristic;
          "Test Available Positions" >:: test_available_positions;
-         "Test Find Best Move" >:: test_find_best_move
+         "Test Find Best Move Depth 1" >:: test_find_best_move_depth_1;
+         "Test Find Best Move Depth 2" >:: test_find_best_move_depth_2
        ]
 
 let series = "Assignment3 Tests" >::: [ tests; minimax_tests ]
