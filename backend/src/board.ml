@@ -30,7 +30,7 @@ module Game = struct
       { x = x; y = y; player = player })
     |> positions_ls_to_yojson 
     |> Yojson.Safe.to_string
-
+    
   let valid_insert (pieces: pieces_map) ((to_insert_x, to_insert_y): Coordinates.t) =
     match CoordMap.find pieces (to_insert_x, to_insert_y) with
     | Some _ -> false (* If there is already a piece at the location, return an error *)
