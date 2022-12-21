@@ -11,16 +11,6 @@ module Game = struct
   type player_number = int
   type pieces_map = Int.t CoordMap.t
 
-  (*
-     Using yojson to output list of pieces
-  *)
-  (* let print_board (pieces : pieces_map) =
-     CoordMap.to_alist pieces
-     |> List.map ~f:(fun (position, player) -> match position with x, y ->
-       { x = x; y = y; player = player })
-     |> positions_ls_to_yojson
-     |> Yojson.Safe.to_string *)
-
   let print_board (pieces : pieces_map) =
     let board = ref "" in
     for i = 0 to 14 do

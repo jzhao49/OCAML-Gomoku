@@ -262,10 +262,12 @@ let deserialize_coordinate_field (json_body : string) =
   let open Yojson.Safe in
   match json_body |> from_string |> coordinate_of_yojson with
   | Ok c -> c
-  | Error _ ->
-      failwith
-        "Deserialization of JSON object failed. Check to make sure there is an \
-         \"x\" and \"y\" field in the body."
+  | Error _ -> 
+    failwith "Deserialization of JSON object failed. Check to make sure there is an \"x\" and \"y\" field in the body."
+
+let () =
+
+  let open Yojson.Safe in
 
 let handle_new_player_move request =
   let%lwt body = Dream.body request in
@@ -325,28 +327,35 @@ let handle_new_ai_move (request : Dream.request) : Dream.response Lwt.t =
         | Ok board_inserted -> board_inserted
         | Error _ -> failwith "Invalid Move"
       in
-      let winner = check_for_winner pos other_player inserted_map in
-      match winner with
-      | Some _ -> Dream.html "Winner: AI!"
-      | None ->
-          game_state :=
-            { pieces = inserted_map; player = player; winner = None };
-          Printf.ksprintf Dream.html "Turn: Player %d!" player)
+      let winner =       
+        match Board.Game.game_over ai_coord player inserted_map with
+          | (true, 2) -> Some(2)
+          | (true, 1) -> Some(1)
+          | (_, _) -> None
+      in game_state := {
+          pieces = inserted_map;
+          player = other_player;
+          winner = winner;
+        };
+      let _ = 
+        let end_of_turn =
+          match !game_state.winner with
+          | Some x -> if player = x then "AI Wins" else "Player Wins"
+          | None -> "No Winner"
+      in serialize_response end_of_turn
+    in
 
-let () =
-  Dream.run ~port:8080 @@ Dream.logger
-  @@ Dream.router
-       [
-         Dream.get "/" (fun _ ->
-             Dream.html
-               "Welcome to Gomoku Ocaml!\n\n\
-               \    Please select from the following:\n\
-                1. /game/move_player or \n\
-                2. /game/move_ai\n\
-                to\n\
-               \    play multiplayer or AI respectively");
-             Dream.post "/move_player" handle_new_player_move;
-             Dream.post "/move_ai" handle_new_ai_move;
-             Dream.get "/board" (fun _ ->
-                 Dream.json (Game.print_board !game_state.pieces));
-       ]
+
+  Dream.run ~port:8080
+  @@ Dream.logger
+  @@ Dream.router [
+    Dream.get "/" (fun _ -> Dream.html "Welcome to Gomoku Ocaml!\n
+    Please select from the following:\n1. /game/move_player or \n2. /game/move_ai\nto
+    play multiplayer or AI respectively");
+    Dream.scope "/game" [] [ 
+      Dream.post "/move_player" handle_new_player_move;
+      Dream.post "/move_ai" handle_new_ai_move;
+      Dream.get "/board" (fun _ ->
+        Dream.html (Game.print_board !game_state.pieces));
+    ];
+  ]
