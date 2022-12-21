@@ -15,10 +15,6 @@ module Game: sig
   *)
   type player_number = int
 
-  type position = {
-    x: int; y: int; player: player_number} 
-    [@@deriving yojson]
-
   (* 
      A map of pieces on the board to their respective player
   *)
