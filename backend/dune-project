@@ -10,9 +10,11 @@
 
 (package
  (name backend)
- (synopsis "A short synopsis")
- (description "A longer description")
- (depends ocaml dune)
- (allow_empty))
+ (synopsis "Backend for Gomoku implemented in Ocaml")
+ (description "We implemented Gomoku that gives a player an option to play against an AI
+ that was impemented using alpha beta pruning.")
+ (depends (ounit2 (> 2.2.6)) ; for each opam dependency list the version
+    (core (> 0.15.0)))
+    (allow_empty))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
