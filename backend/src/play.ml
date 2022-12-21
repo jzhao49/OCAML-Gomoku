@@ -99,11 +99,16 @@ let rec play_gomoku_ai (pieces : int CoordMap.t) (current_player : int)
 
 let () =
   (* Start the game with an empty board and player 1 *)
+  Random.self_init();
+
+  (* Initialize 10 places on the board that act as obstructions (no one is allowed to play there)*)
+  let obstructions = List.init 10 ~f:(fun _ -> ((Random.int 14, Random.int 14), -1))
+  in
   match Sys.get_argv () |> Array.to_list with
   | _ :: n :: _ -> (
       match int_of_string n with
-      | 0 -> play_gomoku CoordMap.empty false 1
-      | 1 -> play_gomoku CoordMap.empty true 1
-      | 2 -> play_gomoku_ai CoordMap.empty 1
+      | 0 -> play_gomoku (CoordMap.of_alist_exn obstructions) false 1
+      | 1 -> play_gomoku (CoordMap.of_alist_exn obstructions) true 1
+      | 2 -> play_gomoku_ai (CoordMap.of_alist_exn obstructions) 1
       | _ -> print_endline "Invalid command")
   | _ -> Stdio.printf "\n"
