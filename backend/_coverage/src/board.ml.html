@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>board.ml &mdash; Coverage report</title>
+    <meta name="description" content="79.07% coverage in src/board.ml">
+    <link rel="stylesheet" href="../coverage.css"/>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>
+        <a href="../index.html">
+          <span class="dirname">src/</span>board.ml
+        </a>
+      </h1>
+      <h2>79.07%</h2>
+    </div>
+    <div id="navbar">
+      <span class="some-visited" style="top:4.30%"></span>
+      <span class="unvisited" style="top:16.13%"></span>
+      <span class="unvisited" style="top:18.28%"></span>
+      <span class="unvisited" style="top:19.35%"></span>
+      <span class="unvisited" style="top:20.43%"></span>
+      <span class="unvisited" style="top:21.51%"></span>
+      <span class="unvisited" style="top:22.58%"></span>
+    </div>
+    <div id="report">
+      <div id="lines-layer">
+        <pre>
+<a id="L1"></a><span > </span>
+<a id="L2"></a><span > </span>
+<a id="L3"></a><span > </span>
+<a id="L4"></a><span class="some-visited"> </span>
+<a id="L5"></a><span > </span>
+<a id="L6"></a><span > </span>
+<a id="L7"></a><span > </span>
+<a id="L8"></a><span > </span>
+<a id="L9"></a><span > </span>
+<a id="L10"></a><span > </span>
+<a id="L11"></a><span > </span>
+<a id="L12"></a><span > </span>
+<a id="L13"></a><span > </span>
+<a id="L14"></a><span > </span>
+<a id="L15"></a><span class="unvisited"> </span>
+<a id="L16"></a><span > </span>
+<a id="L17"></a><span class="unvisited"> </span>
+<a id="L18"></a><span class="unvisited"> </span>
+<a id="L19"></a><span class="unvisited"> </span>
+<a id="L20"></a><span class="unvisited"> </span>
+<a id="L21"></a><span class="unvisited"> </span>
+<a id="L22"></a><span > </span>
+<a id="L23"></a><span > </span>
+<a id="L24"></a><span > </span>
+<a id="L25"></a><span > </span>
+<a id="L26"></a><span > </span>
+<a id="L27"></a><span > </span>
+<a id="L28"></a><span > </span>
+<a id="L29"></a><span class="visited"> </span>
+<a id="L30"></a><span class="visited"> </span>
+<a id="L31"></a><span > </span>
+<a id="L32"></a><span class="visited"> </span>
+<a id="L33"></a><span > </span>
+<a id="L34"></a><span > </span>
+<a id="L35"></a><span > </span>
+<a id="L36"></a><span > </span>
+<a id="L37"></a><span class="visited"> </span>
+<a id="L38"></a><span class="visited"> </span>
+<a id="L39"></a><span class="visited"> </span>
+<a id="L40"></a><span > </span>
+<a id="L41"></a><span > </span>
+<a id="L42"></a><span > </span>
+<a id="L43"></a><span > </span>
+<a id="L44"></a><span class="visited"> </span>
+<a id="L45"></a><span class="visited"> </span>
+<a id="L46"></a><span > </span>
+<a id="L47"></a><span class="visited"> </span>
+<a id="L48"></a><span > </span>
+<a id="L49"></a><span > </span>
+<a id="L50"></a><span class="visited"> </span>
+<a id="L51"></a><span class="visited"> </span>
+<a id="L52"></a><span class="visited"> </span>
+<a id="L53"></a><span > </span>
+<a id="L54"></a><span > </span>
+<a id="L55"></a><span > </span>
+<a id="L56"></a><span class="visited"> </span>
+<a id="L57"></a><span class="visited"> </span>
+<a id="L58"></a><span > </span>
+<a id="L59"></a><span > </span>
+<a id="L60"></a><span > </span>
+<a id="L61"></a><span > </span>
+<a id="L62"></a><span > </span>
+<a id="L63"></a><span class="visited"> </span>
+<a id="L64"></a><span class="visited"> </span>
+<a id="L65"></a><span > </span>
+<a id="L66"></a><span class="visited"> </span>
+<a id="L67"></a><span class="visited"> </span>
+<a id="L68"></a><span > </span>
+<a id="L69"></a><span > </span>
+<a id="L70"></a><span > </span>
+<a id="L71"></a><span > </span>
+<a id="L72"></a><span class="visited"> </span>
+<a id="L73"></a><span class="visited"> </span>
+<a id="L74"></a><span class="visited"> </span>
+<a id="L75"></a><span > </span>
+<a id="L76"></a><span class="visited"> </span>
+<a id="L77"></a><span > </span>
+<a id="L78"></a><span > </span>
+<a id="L79"></a><span class="visited"> </span>
+<a id="L80"></a><span class="visited"> </span>
+<a id="L81"></a><span class="visited"> </span>
+<a id="L82"></a><span > </span>
+<a id="L83"></a><span > </span>
+<a id="L84"></a><span class="visited"> </span>
+<a id="L85"></a><span > </span>
+<a id="L86"></a><span > </span>
+<a id="L87"></a><span > </span>
+<a id="L88"></a><span class="visited"> </span>
+<a id="L89"></a><span > </span>
+<a id="L90"></a><span > </span>
+<a id="L91"></a><span > </span>
+<a id="L92"></a><span class="visited"> </span>
+<a id="L93"></a><span > </span>
+</pre>
+      </div>
+      <div id="text-layer">
+        <pre id="line-numbers">
+<a href="#L1"> 1</a>
+<a href="#L2"> 2</a>
+<a href="#L3"> 3</a>
+<a href="#L4"> 4</a>
+<a href="#L5"> 5</a>
+<a href="#L6"> 6</a>
+<a href="#L7"> 7</a>
+<a href="#L8"> 8</a>
+<a href="#L9"> 9</a>
+<a href="#L10">10</a>
+<a href="#L11">11</a>
+<a href="#L12">12</a>
+<a href="#L13">13</a>
+<a href="#L14">14</a>
+<a href="#L15">15</a>
+<a href="#L16">16</a>
+<a href="#L17">17</a>
+<a href="#L18">18</a>
+<a href="#L19">19</a>
+<a href="#L20">20</a>
+<a href="#L21">21</a>
+<a href="#L22">22</a>
+<a href="#L23">23</a>
+<a href="#L24">24</a>
+<a href="#L25">25</a>
+<a href="#L26">26</a>
+<a href="#L27">27</a>
+<a href="#L28">28</a>
+<a href="#L29">29</a>
+<a href="#L30">30</a>
+<a href="#L31">31</a>
+<a href="#L32">32</a>
+<a href="#L33">33</a>
+<a href="#L34">34</a>
+<a href="#L35">35</a>
+<a href="#L36">36</a>
+<a href="#L37">37</a>
+<a href="#L38">38</a>
+<a href="#L39">39</a>
+<a href="#L40">40</a>
+<a href="#L41">41</a>
+<a href="#L42">42</a>
+<a href="#L43">43</a>
+<a href="#L44">44</a>
+<a href="#L45">45</a>
+<a href="#L46">46</a>
+<a href="#L47">47</a>
+<a href="#L48">48</a>
+<a href="#L49">49</a>
+<a href="#L50">50</a>
+<a href="#L51">51</a>
+<a href="#L52">52</a>
+<a href="#L53">53</a>
+<a href="#L54">54</a>
+<a href="#L55">55</a>
+<a href="#L56">56</a>
+<a href="#L57">57</a>
+<a href="#L58">58</a>
+<a href="#L59">59</a>
+<a href="#L60">60</a>
+<a href="#L61">61</a>
+<a href="#L62">62</a>
+<a href="#L63">63</a>
+<a href="#L64">64</a>
+<a href="#L65">65</a>
+<a href="#L66">66</a>
+<a href="#L67">67</a>
+<a href="#L68">68</a>
+<a href="#L69">69</a>
+<a href="#L70">70</a>
+<a href="#L71">71</a>
+<a href="#L72">72</a>
+<a href="#L73">73</a>
+<a href="#L74">74</a>
+<a href="#L75">75</a>
+<a href="#L76">76</a>
+<a href="#L77">77</a>
+<a href="#L78">78</a>
+<a href="#L79">79</a>
+<a href="#L80">80</a>
+<a href="#L81">81</a>
+<a href="#L82">82</a>
+<a href="#L83">83</a>
+<a href="#L84">84</a>
+<a href="#L85">85</a>
+<a href="#L86">86</a>
+<a href="#L87">87</a>
+<a href="#L88">88</a>
+<a href="#L89">89</a>
+<a href="#L90">90</a>
+<a href="#L91">91</a>
+<a href="#L92">92</a>
+<a href="#L93">93</a>
+</pre>
+<pre><code class="ocaml">open Core
+
+module Coordinates : Map.Key with type t = int * int = struct
+  <span data-count="0">t</span>ype t = <span data-count="8657020736">i</span>nt * in<span data-count="0">t</span> [@@deriving compare, sexp]
+end
+
+module Game = struct
+  module CoordMap : Map.S with type Key.t = Coordinates.t =
+    Map.Make (Coordinates)
+
+  type player_number = int
+  type pieces_map = Int.t CoordMap.t
+
+  let print_board (pieces : pieces_map) =
+    <span data-count="0">l</span>et board = ref "" in
+    for i = 0 to 14 do
+      <span data-count="0">f</span>or j = 0 to 14 do
+        <span data-count="0">i</span>f CoordMap.mem pieces (i, j) then
+          <span data-count="0">b</span>oard :=
+            !board ^ string_of_in<span data-count="0">t</span> (CoordMap.find_ex<span data-count="0">n</span> pieces (i, j)) ^ " "
+        else <span data-count="0">b</span>oard := !board ^ "- "
+      done;
+      board := !board ^ "\n"
+    done;
+    !board
+
+  let valid_insert (pieces : pieces_map)
+      ((to_insert_x, to_insert_y) : Coordinates.t) =
+    <span data-count="48637">m</span>atch CoordMap.find pieces (to_insert_x, to_insert_y) with
+    | <span data-count="1">S</span>ome _ -&gt;
+        false (* If there is already a piece at the location, return an error *)
+    | <span data-count="48636">N</span>one -&gt; true (* If there is no piece there yet return true *)
+
+  let insert_piece (pieces : pieces_map)
+      ((to_insert_x, to_insert_y) : Coordinates.t) (player : player_number) :
+      (pieces_map, string) result =
+    <span data-count="48637">i</span>f valid_insert pieces (to_insert_x, to_insert_y) then
+      <span data-count="48636">O</span>k (CoordMap.add_ex<span data-count="48636">n</span> pieces ~key:(to_insert_x, to_insert_y) ~data:player)
+    else <span data-count="1">E</span>rror "invalid insert"
+
+  let rec longest_player_line_helper ((x, y) : Coordinates.t)
+      ((dx, dy) : Coordinates.t) (pieces : pieces_map) (player : player_number)
+      =
+    <span data-count="70">m</span>atch CoordMap.find pieces (x, y) with
+    | <span data-count="41">S</span>ome p2 -&gt;
+        if p2 = player then
+          <span data-count="38">m</span>atch
+            longest_player_line_helper (x + dx, y + dy) (dx, dy) pieces player
+          with
+          | <span data-count="38">c</span>ur_length -&gt; cur_length + 1
+        else <span data-count="3">0</span>
+    | <span data-count="29">_</span> -&gt; 0
+
+  let longest_player_line ((x, y) : Coordinates.t) ((dx, dy) : Coordinates.t)
+      (pieces : pieces_map) =
+    <span data-count="24">m</span>atch CoordMap.find pieces (x, y) with
+    | <span data-count="16">S</span>ome player -&gt;
+        (* Find the length in the positive direction starting from position (x, y) *)
+        let pos_count =
+          longest_player_line_helper (x, y) (dx, dy) pieces player
+        in
+        (* Find the length in the negative direction starting from position (x, y) *)
+        <span data-count="16">l</span>et neg_count =
+          longest_player_line_helper (x, y) (<span data-count="16">-</span>dx, <span data-count="16">-</span>dy) pieces player
+        in
+        <span data-count="16">p</span>os_count + neg_count - 1
+    | <span data-count="8">_</span> -&gt; 0
+
+  let rec check_all_directions_helper ((x, y) : Coordinates.t)
+      (pieces : pieces_map) (directions : Coordinates.t List.t) (acc : int list)
+      : int list =
+    <span data-count="30">m</span>atch directions with
+    | <span data-count="6">[</span>] -&gt; acc
+    | <span data-count="24">(</span>dx, dy) :: tl -&gt;
+        check_all_directions_helper (x, y) pieces tl
+          (longest_player_lin<span data-count="24">e</span> (x, y) (dx, dy) pieces :: acc)
+
+  let rec max (l : int list) (cur_max : int) : int =
+    <span data-count="33">m</span>atch l with
+    | <span data-count="8">[</span>] -&gt; cur_max
+    | <span data-count="25">x</span> :: tl -&gt; if x &gt; cur_max then <span data-count="10">m</span>ax tl x else <span data-count="15">m</span>ax tl cur_max
+
+  let check_all_directions ((x, y) : Coordinates.t) (pieces : pieces_map) =
+    <span data-count="6">l</span>et directions = [ (0, 1); (1, 0); (1, 1); (-1, 1) ] in
+    let line_lengths =
+      check_all_directions_helper (x, y) pieces directions []
+    in
+    <span data-count="6">m</span>ax line_lengths (-1)
+
+  let game_over ((inserted_x, inserted_y) : Coordinates.t)
+      (player : player_number) (pieces : pieces_map) : bool * player_number =
+    <span data-count="2">(</span>check_all_direction<span data-count="2">s</span> (inserted_x, inserted_y) pieces = 5, player)
+end
+</code></pre>
+      </div>
+    </div>
+    <script src="../coverage.js"></script>
+  </body>
+</html>
