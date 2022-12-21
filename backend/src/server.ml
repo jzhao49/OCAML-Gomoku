@@ -352,6 +352,9 @@ let () =
   Dream.run ~port:8080
   @@ Dream.logger
   @@ Dream.router [
+    Dream.get "/" (fun _ -> Dream.html "Welcome to Gomoku Ocaml!\n
+    Please select from the following:\n1. /game/move_player or \n2. /game/move_ai\nto
+    play multiplayer or AI respectively");
     Dream.scope "/game" [] [ 
       Dream.post "/move_player" handle_new_player_move;
       Dream.post "/move_ai" handle_new_ai_move;
